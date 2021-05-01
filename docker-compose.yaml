@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+  lulokal:
+    build:
+      context: .
+      dockerfile: coreconnect/Dockerfile
+    command: python manage.py runserver
+    ports:
+      - 0.0.0.0:8000:8000
+    volumes:
+      - .:/code
