@@ -1,7 +1,7 @@
 version: '2'
 
 services:
-  lulokal:
+  coreconnect:
     build:
       context: .
       dockerfile: coreconnect/Dockerfile
