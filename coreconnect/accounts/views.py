@@ -81,5 +81,10 @@ class JwtView(generics.GenericAPIView):
                 return JsonResponse({
                     "message": "jwt expired"
                 }, status=status.HTTP_401_UNAUTHORIZED)
+            except Exception as err:
+                return JsonResponse({
+                    "message": "JWT Not Registered",
+                    "error": err.args
+                }, status=status.HTTP_400_BAD_REQUEST)
         else:
             return JsonResponse(serializer.errors)

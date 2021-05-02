@@ -5,6 +5,7 @@ Welcome on board, this is test task from efishery
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+Overview of the project that we have 2 apps server running on different port.
 
 ### Prerequisites
 
@@ -40,6 +41,7 @@ Step 5, and 6 is necessary when you do your own first setup.
 
 Setup without docker on Ubuntu (tested on Ubuntu 20.04):
 ```
+Setting up django-server(coreconnect)
 1. git clone https://github.com/kunci115/efish.git
 2. cd coreconnect
 3. python manage.py makemigrations
@@ -52,7 +54,7 @@ Setting up node js server(fetcher apps)
 3. npm install
 4. node index.js
 ```
-Server up
+If everythings running well, django server will be run on 8000 port,  and node server will be run on 3000 port.
 
 
 ## API Endpoint
