@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 const fetch = require('node-fetch')
+const _ = require('lodash');
 var jwt = require('jsonwebtoken')
 var LRU = require("lru-cache")
     , options = { max: 500
@@ -19,6 +20,12 @@ var decoder_incoming = function(req, res, next) {
         res.status(401).send(err)
     }
 }
+function median(arr){
+    arr.sort(function(a, b){ return a - b; });
+    var i = arr.length / 2;
+    return i % 1 == 0 ? (parseFloat(arr[i - 1]) + parseFloat(arr[i])) / 2 : parseFloat(arr[Math.floor(i)]);
+}
+
 Date.prototype.getWeek = function (dowOffset) {
     /*getWeek() was developed by Nick Baicoianu at MeanFreePath: http://www.meanfreepath.com */
 
@@ -47,26 +54,9 @@ Date.prototype.getWeek = function (dowOffset) {
     return weeknum;
 };
 
-function maxMinAvg(arr) {
-    var max = arr[0];
-    var min = arr[0];
-    var sum = arr[0];
-    for (var i = 1; i < arr.length; i++) {
-        if (arr[i] > max) {
-            max = arr[i];
-        }
-        if (arr[i] < min) {
-            min = arr[i];
-        }
-        sum = sum + arr[i];
-    }
-    return [max, min, sum/arr.length];
-}
-
 app.use(decoder_incoming)
 
 app.get('/efish/resource', async (req, res) => {
-    console.log('test')
     const data_efish = await fetch('https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list')
     const resp_data = await data_efish.json()
     var usd_idr = {'USD_IDR': 0}
@@ -105,7 +95,6 @@ app.get('/efish/storages', async (req, res) => {
     const resp_data = await data_efish.json()
     for (i=0; i<resp_data.length; i++) {
         var min_max_avg = []
-        console.log(min_max_avg)
         if (resp_data[i]['uuid'] === null || resp_data[i]['tgl_parsed'] === null || resp_data[i]['price'] === null) {
             delete resp_data[i]
             continue
@@ -115,13 +104,33 @@ app.get('/efish/storages', async (req, res) => {
             var week = new Date(week_counter)
             resp_data[i]['week'] = week.getWeek()
         }}
-    //
-    //     if (resp_data[i]['week'] === i) {
-    //         mem.push(resp_data[i])
-    //     }
-    //     console.log(maxMinAvg(min_max_avg))
-    // }
-    res.send(resp_data.filter(Boolean))
+    var ds = resp_data.filter(Boolean)
+    var mem = {}
+    for(d of ds){
+        if(!(d["area_provinsi"] in mem)){
+            mem[d["area_provinsi"]] = {};
+        }
+
+        if(!(d["week"] in mem[d["area_provinsi"]])){
+            mem[d["area_provinsi"]][d["week"]] = [];
+        }
+
+        mem[d["area_provinsi"]][d["week"]].push(d["price"])
+    }
+    var endResp = {}
+    for(m in mem){
+        endResp[m] = {}
+        for(w in mem[m]){
+            endResp[m][w] = {
+                "average": parseFloat(_.mean(mem[m][w])).toFixed(4),
+                "min": parseFloat(_.min(mem[m][w])).toFixed(4),
+                "max": parseFloat(_.max(mem[m][w])).toFixed(4),
+                "median": parseFloat(median(mem[m][w])).toFixed(4)
+            }
+        }
+    }
+
+    res.send(endResp)
 })
 
 app.get('/efish/jwt', async (req, res) => {
