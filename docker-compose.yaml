@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: coreconnect/Dockerfile
-    command: python manage.py runserver
+    command: python coreconnect/manage.py runserver 0.0.0.0:8000
     ports:
       - 0.0.0.0:8000:8000
     volumes:

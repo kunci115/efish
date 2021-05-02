@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from .serializers import RegisterSerializer, LoginSerializer, JwtSerializer
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from django.db import IntegrityError
 from .models import Role
@@ -26,13 +26,13 @@ class RegisterView(generics.GenericAPIView):
                     "password": serializer.data['password'],
                     "name": serializer.data['name'],
                     "role": serializer.data['role']
-                })
+                }, status=status.HTTP_201_CREATED)
             except IntegrityError:
                 return JsonResponse({
-                    "messagge": "Phone Number Already Taken"
-                })
+                    "error": "Phone Number Already Taken"
+                }, status=status.HTTP_200_OK)
         else:
-            return JsonResponse(serializer.errors)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class LoginView(generics.GenericAPIView):
@@ -44,7 +44,7 @@ class LoginView(generics.GenericAPIView):
         if serializer.is_valid():
             user = authenticate(username=serializer.data['phone_number'],
                                 password=serializer.data['password'])
-            if user.is_authenticated:
+            if user is not None and user.is_authenticated:
                 key = "efish-test"
                 phone_number = user.username
                 name = user.first_name + user.last_name
@@ -57,13 +57,13 @@ class LoginView(generics.GenericAPIView):
                                      key, algorithm="HS256")
                 return JsonResponse({
                     "jwt": encoded
-                })
+                }, status=status.HTTP_201_CREATED)
             else:
                 return JsonResponse({
-                    "message": "phone number & password is not authenticated"
-                })
+                    "message": "Invalid Phone Number/Password"
+                }, status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return JsonResponse(serializer.errors)
+            return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class JwtView(generics.GenericAPIView):
@@ -76,10 +76,10 @@ class JwtView(generics.GenericAPIView):
             key = "efish-test"
             try:
                 decode_jwt = jwt.decode(serializer.data['jwt'], key, algorithms="HS256")
-                return JsonResponse(decode_jwt)
+                return JsonResponse(decode_jwt, status=status.HTTP_200_OK)
             except jwt.ExpiredSignatureError:
                 return JsonResponse({
                     "message": "jwt expired"
-                })
+                }, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return JsonResponse(serializer.errors)

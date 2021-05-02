@@ -128,3 +128,4 @@ STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 handler500 = 'rest_framework.exceptions.server_error'
+APPEND_SLASH = False
