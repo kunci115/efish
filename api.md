@@ -217,7 +217,7 @@
                     }`
 
           <br><br><br>
-* **URL Production storage aggregate(provinsi, week)**
+* **URL Production jwt auth**
 
   128.199.106.148:3000/efish/jwt
 
