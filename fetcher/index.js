@@ -103,19 +103,16 @@ app.get('/efish/storages', async (req, res) => {
             var week_counter = resp_data[i]['tgl_parsed'].substring(0, 10)
             var week = new Date(week_counter)
             resp_data[i]['week'] = week.getWeek()
-        }}
-    var ds = resp_data.filter(Boolean)
-    var mem = {}
-    for(d of ds){
-        if(!(d["area_provinsi"] in mem)){
-            mem[d["area_provinsi"]] = {};
+        }
+        if(!(resp_data[i]["area_provinsi"] in mem)){
+            mem[resp_data[i]["area_provinsi"]] = {};
         }
 
-        if(!(d["week"] in mem[d["area_provinsi"]])){
-            mem[d["area_provinsi"]][d["week"]] = [];
+        if(!(resp_data[i]['week'] in mem[resp_data[i]["area_provinsi"]])){
+            mem[resp_data[i]["area_provinsi"]][resp_data[i]['week']] = [];
         }
 
-        mem[d["area_provinsi"]][d["week"]].push(d["price"])
+        mem[resp_data[i]["area_provinsi"]][resp_data[i]['week']].push(resp_data[i]['price'])
     }
     var endResp = {}
     for(m in mem){
