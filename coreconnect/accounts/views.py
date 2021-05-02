@@ -53,7 +53,7 @@ class LoginView(generics.GenericAPIView):
                 encoded = jwt.encode({"phone_number": phone_number,
                                       "name": name,
                                       "role": role.role_name,
-                                      "exp": timestamp + datetime.timedelta(seconds=60)},
+                                      "exp": timestamp + datetime.timedelta(seconds=1800)},
                                      key, algorithm="HS256")
                 return JsonResponse({
                     "jwt": encoded

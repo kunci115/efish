@@ -46,6 +46,23 @@ Date.prototype.getWeek = function (dowOffset) {
     }
     return weeknum;
 };
+
+function maxMinAvg(arr) {
+    var max = arr[0];
+    var min = arr[0];
+    var sum = arr[0];
+    for (var i = 1; i < arr.length; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+        if (arr[i] < min) {
+            min = arr[i];
+        }
+        sum = sum + arr[i];
+    }
+    return [max, min, sum/arr.length];
+}
+
 app.use(decoder_incoming)
 
 app.get('/efish/resource', async (req, res) => {
@@ -64,7 +81,7 @@ app.get('/efish/resource', async (req, res) => {
 
     // console.log(usd_idr)
     for (i=0; i<resp_data.length; i++){
-        if (resp_data[i]['uuid'] == null){
+        if (resp_data[i]['uuid'] === null || resp_data[i]['tgl_parsed'] === null || resp_data[i]['price'] === null){
             delete resp_data[i]
             continue
         }
@@ -84,14 +101,26 @@ app.get('/efish/storages', async (req, res) => {
     }
     const data_efish = await fetch('https://stein.efishery.com/v1/storages/5e1edf521073e315924ceab4/list')
     var mem = {}
-    const resp_data = await data_efish.json()
-    for (i=0; i<resp_data.length; i++){
 
+    const resp_data = await data_efish.json()
+    for (i=0; i<resp_data.length; i++) {
+        var min_max_avg = []
+        console.log(min_max_avg)
+        if (resp_data[i]['uuid'] === null || resp_data[i]['tgl_parsed'] === null || resp_data[i]['price'] === null) {
+            delete resp_data[i]
+            continue
+        }
         if (resp_data[i]['tgl_parsed'] != null) {
-            var week_counter = resp_data[i]['tgl_parsed'].substring(0,10)
+            var week_counter = resp_data[i]['tgl_parsed'].substring(0, 10)
             var week = new Date(week_counter)
             resp_data[i]['week'] = week.getWeek()
         }}
+    //
+    //     if (resp_data[i]['week'] === i) {
+    //         mem.push(resp_data[i])
+    //     }
+    //     console.log(maxMinAvg(min_max_avg))
+    // }
     res.send(resp_data.filter(Boolean))
 })
 
