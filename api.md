@@ -117,7 +117,10 @@
         * **Code:** 400 Bad Request <br />
           **Content:** `{ message : "jwt not registered",
                           err: error message}`  
-          <br><br><br>
+          <br>
+          
+**Fetcher**
+----
 * **URL Production resource(price usd)**
 
   128.199.106.148:3000/efish/resource
