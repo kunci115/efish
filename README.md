@@ -3,10 +3,10 @@
 
 Welcome on board, this is test task from efishery
 ## Getting Started
-
+![Context](https://github.com/kunci115/efish/blob/master/Context.jpg)
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 Overview of the project that we have 2 apps server running on different port.
-
+![Deployment](https://github.com/kunci115/efish/blob/master/deployment.jpg)
 ### Prerequisites
 
 What things you need to install the software and how to install them
