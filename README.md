@@ -42,9 +42,10 @@ Setup without docker on Ubuntu (tested on Ubuntu 20.04):
 Setting up django-server(coreconnect)
 1. git clone https://github.com/kunci115/efish.git
 2. cd coreconnect
-3. python manage.py makemigrations
-4. python manage.py migrate
-5. python manage.py runserver
+3. pip install -r requirements.txt
+4. python manage.py makemigrations
+5. python manage.py migrate
+6. python manage.py runserver
 ------------------------------
 Setting up node js server(fetcher apps)
 1. Open new terminal

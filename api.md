@@ -42,7 +42,7 @@
 <br><br><br>
 * **URL Production Login**
 
-  128.199.106.148:8000/account/register/
+  128.199.106.148:8000/account/login/
 
     * **Method:**
 
