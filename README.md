@@ -1,7 +1,7 @@
 
 # Efish
 
-Welcome on board, this is test task from efishery this repo already deployed on 128.199.106.148, for more detail, please read instruction bellow
+Welcome on board, this is an example request with efishery this repo already deployed on 128.199.106.148, for more detail, please read instruction bellow
 ## Getting Started
 ![Context](https://github.com/kunci115/efish/blob/master/Context.jpg) <br>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
