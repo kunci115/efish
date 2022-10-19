@@ -1,5 +1,5 @@
 
-# Django-jwt-server
+# Django-jwt-server node client
 
 Welcome on board, this is example implementation of django jwt server with nodejs client for more detail, please read instruction bellow
 ## Getting Started
